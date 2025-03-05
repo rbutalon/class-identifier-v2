@@ -1,0 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+* {
+    margin: 0;
+    line-height: calc(1em + 0.5rem);
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0e0e10;
+    color: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    height: 99vh;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.card {
+    position: relative;
+    line-height: 80px;
+    height: 580px;
+    width: 100%;
+    background-color: #0e0e10;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+.card::after, .card::before {
+    content: '';
+    position: absolute;
+    height: 580px;
+    width: 100%;
+    background-image: conic-gradient(from var(--angle), #ff4545, #00ff99, #006aff, #ff0095, #ff4545);
+    padding: 2px;
+    border-radius: 20px;
+    animation: 3s spin linear infinite;
+    z-index: -1;
+}   
+
+@keyframes spin {
+    0% {
+        --angle: 0deg;
+    }
+    100% {
+        --angle: 360deg;
+    }
+}
+
+.card::before {
+    filter: blur(1rem);
+}
+
+h1 {
+    font-size: 1.5em;
+    font-weight: 800;
+}
+
+label {
+    font-size: 0.85em;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+input[type="number"]::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input, textarea {
+    font-family: 'Space Mono', sans-serif;
+    font-size: 0.7em;
+}
+
+input{
+    height: 35px;
+    background: transparent;
+    color: #f1f5f9;
+    border: 1px solid #4a4a4a;
+    border-radius: 10px;
+    padding-left: 15px;
+}
+
+textarea {
+    background: transparent;
+    color: #f1f5f9;
+    border: 1px solid #4a4a4a;
+    border-radius: 10px;
+    padding-left: 15px;
+}
+
+input:focus, textarea:focus, input.empty {
+    border-color: #bf00ff;
+    outline: none;
+}
+
+input.valid {
+    border-color: #00ff99;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+.option-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+label[class="opt1"], label[class="opt2"] {
+    display: block;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+label span {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 20px 3px 10px;
+    border-radius: 20px;
+    transition: .25s ease;
+}
+
+label span:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+label span::before {
+    content: '';
+    background-color: #0e0e10;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: .25s ease;
+    box-shadow: inset 0 0 0 2px #4a4a4a;
+}
+
+input[type="radio"]:checked + span::before {
+    box-shadow: inset 0 0 0 5px #bf00ff;
+}
+
+.identifyBtn {
+    margin: 0;
+    padding: 5px 15px;
+    border: none;
+    font-size: 17px;
+    color: #f1f5f9;
+    background: linear-gradient(40deg, rgba(191,0,255,1) 0%, rgba(94,0,255,1) 100%);
+    box-shadow: 0 0 15px rgba(94, 0, 255, 0.9);
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 500ms;
+  }
+  
+  .identifyBtn:hover {
+    box-shadow: 1px 1px 25px rgba(94, 0, 255, 0.9);
+    color: #20232e;
+    transition: 500ms;
+  }
+
+  .identifyBtn:active {
+    box-shadow: 1px 1px 13px #20232e, -1px -1px 33px #545b78;
+    color: #e11d48;
+    transition: 100ms;  
+}
+
+#message {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#fNameCtr, #lNameCtr, #addressCtr {
+    font-size: 0.6em;
+    height: 0.6em;
+}
+
+.error {
+    font-size: 0.8em;
+    color: #ff4545;
+}
+
+/* xs */
+@media (min-width: 475px) {
+    .background-image { 
+        position: absolute;
+        background-repeat: no-repeat;
+        background-size: contain; 
+        z-index: -1;
+        pointer-events: none; 
+    }
+    .container, .card {
+        max-width: 475px;
+    }
+
+}
+
+/* sm */
+@media (min-width: 640px) {
+    .container {
+        max-width: 640px;
+    }
+
+}
+
+/* md */
+@media (min-width: 768px) {
+    .container {
+        max-width: 768px;
+    }
+
+}
+
+/* lg */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1024px;
+    }
+
+    .card {
+        max-width: 640px;
+    }
+
+}
+
+/* xl */
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1280px;
+    }
+
+}
+
+/* 2xl */
+@media (min-width: 1536px) {
+    .container {
+        max-width: 1536px;
+    }
+}

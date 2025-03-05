@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Identifier v2</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./script/script.js"></script>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="icon" href="icon.png" type="image/png">
+</head>
+<body>
+    <div class="container">
+        <h1>Class Identifier v2</h1>
+        <div class="rgbBorder"></div>
+        <form class="card" id="card" method="POST" action="main.php">
+            <div class="input-group">
+                    <label for="age">Id *</label>
+                    <input type="number" inputmode="numeric" name="userId" id="userId" min="1" max="100" placeholder="Enter your id number." required>
+                </div>
+                <div class="input-group">
+                    <label for="fName">First Name *</label>
+                    <input type="text" name="fName" id="fName" data-counter="#fNameCtr" placeholder="Enter your first name." required>
+                    <span id="fNameCtr">0/50</span>
+                </div>
+                <div class="input-group">
+                    <label for="lName">Last Name *</label>
+                    <input type="text" name="lName" id="lName" data-counter="#lNameCtr" placeholder="Enter your last name." required>
+                    <span id="lNameCtr">0/50</span>
+                </div>
+                <div class="input-group">
+                    <label>Gender *</label>
+                    <div class="option-group">
+                        <label class="opt1">
+                            <input type="radio" name="genderOpt" id="maleOption" value="3" checked required>
+                            <span>Male</span>
+                        </label>
+                        <label class="opt2">
+                            <input type="radio" name="genderOpt" id="femaleOption" value="4" required>
+                            <span>Female</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="age">Age *</label>
+                    <input type="number" inputmode="numeric" name="age" id="age" min="3" max="100" placeholder="Enter your age." required>
+                </div>
+                <div class="input-group">
+                    <label for="address">Address *</label>
+                    <textarea name="address" id="address" rows="4" cols="50" data-counter="#addressCtr" placeholder="Type your address here." required></textarea>
+                    <span id="addressCtr">0/150</span>
+                </div>
+                <span id="message"></span>
+                <button class="identifyBtn" type="submit">Identify</button>
+        </form>
+    </div>
+</body>
+</html>
