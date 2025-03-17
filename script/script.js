@@ -52,10 +52,12 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
     
+    // space validation for name and address
     function validateSpaces(input) {
       return !input.startsWith(" ") && !input.endsWith(" "); // check lang kung di nagstart or nagend sa space
     }
     
+    // special character validation for name
     function hasSpecialCharacters(input) {
       // List of special characters
       const specialCharacters = "0123456789!@#$%^&*()_+{}:\"<>?|[];,./~"; //removed apostrophe , hyphen, and backtick
@@ -70,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
       return false; 
     }
     
+    // address validation
     function validAddress(input) {
       const specialCharacters = "!@#$%^&*()_+{}:\"<>?|[];~"; //removed numbers, comma, period, and forward slash
       
@@ -82,7 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       return false; 
     }
-    
+  
+    // number validation
     function containsNumber(input) {
       for (let i = 0; i < input.length; i++) {
         if (!isNaN(input[i])) { // check current character if it is a number
@@ -176,19 +180,43 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
+          if (data.status === "success") {
             Swal.fire({
               title: "Section Identified!",
               text: data.message,
               icon: "success",
               confirmButtonText: "Cool!"
-          }).then(() => {
-              Swal.fire({
-                  title: "Summary of Input",
-                  html: `Name: ${data.summary.Name} <br> Gender: ${data.summary.Gender} <br> Section: ${data.section} <br> Age: ${data.summary.Age} <br> Address: ${data.summary.Address}`,
-                  icon: "info",
-                  confirmButtonText: "Cool!"
-              });
           });
+
+          let table = document.querySelector("table");
+          let tableBody = document.getElementById("userInfos");
+          let newRow = document.createElement("tr");
+
+          table.classList.add("submitted");
+
+          newRow.innerHTML = `
+              <td>${data.summary.id}</td>
+              <td>${data.summary.Name}</td>
+              <td>${data.summary.Gender}</td>
+              <td>${data.summary.Age}</td>
+              <td>${data.summary.Address}</td>
+              <td>${data.section}</td>
+                  <button class="edit-btn" data-id="${data.summary.Id}">Edit</button>
+                  <button class="delete-btn" data-id="${data.summary.Id}">Delete</button>
+              
+          `;
+
+          tableBody.appendChild(newRow);
+
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: data.message,
+              icon: "error",
+              confirmButtonText: "Okay"
+            })
+        }
+  
         })
         .catch(error => console.error("Error:", error));
         }

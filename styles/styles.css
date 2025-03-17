@@ -19,6 +19,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-x: hidden;
 }
 
 .container {
@@ -201,6 +202,17 @@ input[type="radio"]:checked + span::before {
     transition: 100ms;  
 }
 
+.edit-btn, .delete-btn {
+    background: transparent;
+    border: 1px solid #4a4a4a;
+    border-radius: 5px;
+    padding: 5px 8px;
+    color: #f1f5f9;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
 #message {
     width: 80%;
     display: flex;
@@ -219,6 +231,49 @@ input[type="radio"]:checked + span::before {
     color: #ff4545;
 }
 
+table {
+    display: none;
+}
+
+.submitted {
+    display: table;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    height: max-content;
+    border: 1px solid #4a4a4a;
+}
+
+th{
+    text-align: center;
+    background-color: #4a4a4a;
+    color: #f1f5f9;
+    font-weight: 600;
+    font-size: 0.85em;
+    padding: 0 5px;
+    border: 1px solid #000;
+}
+
+td {
+    text-align: center;
+    font-size: 0.7em;
+    border: 1px solid #4a4a4a;
+    padding: 5px;
+    text-wrap: wrap;
+    color:#f1f5f9;
+}
+
+td:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+
 /* xs */
 @media (min-width: 475px) {
     .background-image { 
@@ -228,7 +283,7 @@ input[type="radio"]:checked + span::before {
         z-index: -1;
         pointer-events: none; 
     }
-    .container, .card {
+    .container, .card, .submitted {
         max-width: 475px;
     }
 
@@ -236,15 +291,14 @@ input[type="radio"]:checked + span::before {
 
 /* sm */
 @media (min-width: 640px) {
-    .container {
+    .container, .submitted {
         max-width: 640px;
     }
-
 }
 
 /* md */
 @media (min-width: 768px) {
-    .container {
+    .container, .submitted {
         max-width: 768px;
     }
 
@@ -257,6 +311,10 @@ input[type="radio"]:checked + span::before {
     }
 
     .card {
+        max-width: 640px;
+    }
+
+    .submitted {
         max-width: 640px;
     }
 
