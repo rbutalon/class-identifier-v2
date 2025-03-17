@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
   
     const inputs = document.querySelectorAll('input[data-counter]');
     const addressCounter = document.querySelectorAll('textarea[data-counter]');
+
+    // edit button
+    const editBtn = document.querySelector(".edit-btn");
+
+    // delete button
+    const deleteBtn = document.querySelector(".delete-btn");
     
     function validateInput() {
     
@@ -165,6 +171,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
     });
+
+   
     
     // form submission validation
     card.addEventListener('submit', (event) => {

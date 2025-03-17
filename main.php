@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-function AddUserData($id, $firstName, $lastName, $gender, $age, $address, &$section)
+function addUserData($id, $firstName, $lastName, $gender, $age, $address, &$section)
 {
     if (!isset($_SESSION["users"])) {
         $_SESSION["users"] = []; // create array if not exists
@@ -49,6 +49,22 @@ function AddUserData($id, $firstName, $lastName, $gender, $age, $address, &$sect
     return ["status" => "success", "message" => "User added successfully!", "section" => $section, "summary" => $newUser];
 }
 
+function deleteUserData($id)
+{
+    if (!isset($_SESSION["users"]) || count($_SESSION["users"]) == 0) {
+        return ["status" => "error", "message" => "No users found."];
+    }
+
+    foreach ($_SESSION["users"] as $index => $user) {
+        if ($user["id"] == $id) {
+            array_splice($_SESSION["users"], $index, 1); // Remove user
+            return ["status" => "success", "message" => "User deleted successfully!"];
+        }
+    }
+
+    return ["status" => "error", "message" => "User not found."];
+}
+
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userId = isset($_POST["userId"]) ? trim($_POST["userId"]) : '';
@@ -59,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $address = isset($_POST["address"]) ? trim($_POST["address"]) : '';
     $section = "";
 
-    $result = AddUserData($userId, $fName, $lName, $gender, $age, $address, $section);
+    $result = addUserData($userId, $fName, $lName, $gender, $age, $address, $section);
     session_destroy();
     echo json_encode($result);
     exit;
