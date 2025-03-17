@@ -75,9 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $address = isset($_POST["address"]) ? trim($_POST["address"]) : '';
     $section = "";
 
-    $result = addUserData($userId, $fName, $lName, $gender, $age, $address, $section);
-    session_destroy();
+    $result = addUserData($userId, $fName, $lName, $gender, $age, $address, $section); 
     echo json_encode($result);
     exit;
 }
+
 ?>
