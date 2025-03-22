@@ -19,11 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function validateInput() {
     
-      if ((fName.value.length < 2 || fName.value.length > 15) && (lName.value.length < 2 || lName.value.length > 15)) {
-        message.setAttribute("class", "error");
-        message.innerHTML = "Minimum of 2 and maximum of 15 characters for first name and last name.";
-        return false; // prevent form submit
-      } else {
         if (!validateSpaces(fName.value) || !validateSpaces(lName.value) || !validateSpaces(address.value)) {
           message.setAttribute("class", "error");
           message.innerHTML = "Spaces are not allowed before and after the name and address.";
@@ -55,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     
         return true;
-      }
+      
     }
     
     // space validation for name and address
@@ -174,61 +169,123 @@ document.addEventListener('DOMContentLoaded', function() {
 
    
     
-    // form submission validation
-    card.addEventListener('submit', (event) => {
-      event.preventDefault();
-      if (!validateInput()) {
-        return;
-      } else {
-        const formData = new FormData(event.target);
+// Form submission validation
+card.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (!validateInput()) {
+    return;
+  } else {
+    const formData = new FormData(event.target);
 
-        fetch("main.php", {
-          method: "POST",
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.status === "success") {
+    fetch("main.php", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "success") {
+          let table = document.querySelector("table");
+          let tableBody = document.getElementById("userInfos");
+          let existingRow = null;
+
+          // Check if the ID already exists in the table
+          for (let row of tableBody.rows) {
+            if (row.cells[0].innerText === data.summary.id) {
+              existingRow = row;
+              break;
+            }
+          }
+
+          if (existingRow) {
+            // If ID exists, show Swal options
+            Swal.fire({
+              title: "ID already exists!",
+              text: "Would you like to edit or delete this entry?",
+              icon: "warning",
+              showCancelButton: true,
+              showDenyButton: true,
+              confirmButtonText: "Edit",
+              denyButtonText: "Delete",
+              cancelButtonText: "Cancel",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Edit option
+                Swal.fire({
+                  title: "Edit Information",
+                  html: `
+                    <input id="swal-name" class="swal2-input" placeholder="Name" value="${existingRow.cells[1].innerText}">
+                    <input id="swal-gender" class="swal2-input" placeholder="Gender" value="${existingRow.cells[2].innerText}">
+                    <input id="swal-age" class="swal2-input" placeholder="Age" value="${existingRow.cells[3].innerText}">
+                    <input id="swal-address" class="swal2-input" placeholder="Address" value="${existingRow.cells[4].innerText}">
+                  `,
+                  showCancelButton: true,
+                  confirmButtonText: "Save",
+                  preConfirm: () => {
+                    return {
+                      name: document.getElementById("swal-name").value,
+                      gender: document.getElementById("swal-gender").value,
+                      age: document.getElementById("swal-age").value,
+                      address: document.getElementById("swal-address").value,
+                    };
+                  },
+                }).then((editResult) => {
+                  if (editResult.isConfirmed) {
+                    // Update the existing row
+                    existingRow.cells[1].innerText = editResult.value.name;
+                    existingRow.cells[2].innerText = editResult.value.gender;
+                    existingRow.cells[3].innerText = editResult.value.age;
+                    existingRow.cells[4].innerText = editResult.value.address;
+                    Swal.fire("Updated!", "The record has been updated.", "success");
+                  }
+                });
+              } else if (result.isDenied) {
+                // Delete option
+                existingRow.remove();
+
+                // if table has 1 row, remove the submitted class (to display: none;)
+                if (tableBody.rows.length === 1) {
+                  table.classList.remove("submitted");
+                }
+
+                Swal.fire("Deleted!", "The record has been removed.", "success");
+              }
+            });
+          } else {
+            // If ID doesn't exist, add new row
             Swal.fire({
               title: "Section Identified!",
               text: data.message,
               icon: "success",
-              confirmButtonText: "Cool!"
-          });
+              confirmButtonText: "Cool!",
+            });
 
-          let table = document.querySelector("table");
-          let tableBody = document.getElementById("userInfos");
-          let newRow = document.createElement("tr");
+            let newRow = document.createElement("tr");
+            table.classList.add("submitted");
 
-          table.classList.add("submitted");
-
-          newRow.innerHTML = `
+            newRow.innerHTML = `
               <td>${data.summary.id}</td>
               <td>${data.summary.Name}</td>
               <td>${data.summary.Gender}</td>
               <td>${data.summary.Age}</td>
               <td>${data.summary.Address}</td>
               <td>${data.section}</td>
-                  <button class="edit-btn" data-id="${data.summary.Id}">Edit</button>
-                  <button class="delete-btn" data-id="${data.summary.Id}">Delete</button>
-              
-          `;
+            `;
 
-          tableBody.appendChild(newRow);
+            tableBody.appendChild(newRow);
+          }
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: data.message,
+            icon: "error",
+            confirmButtonText: "Okay",
+          });
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+});
 
-          } else {
-            Swal.fire({
-              title: "Error!",
-              text: data.message,
-              icon: "error",
-              confirmButtonText: "Okay"
-            })
-        }
-  
-        })
-        .catch(error => console.error("Error:", error));
-        }
-      });
   
   });
   

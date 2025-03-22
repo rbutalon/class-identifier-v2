@@ -33,7 +33,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .card {
@@ -202,17 +202,6 @@ input[type="radio"]:checked + span::before {
     transition: 100ms;  
 }
 
-.edit-btn, .delete-btn {
-    background: transparent;
-    border: 1px solid #4a4a4a;
-    border-radius: 5px;
-    padding: 5px 8px;
-    color: #f1f5f9;
-    font-size: 0.8em;
-    cursor: pointer;
-    transition: 0.25s ease;
-}
-
 #message {
     width: 80%;
     display: flex;
@@ -231,6 +220,14 @@ input[type="radio"]:checked + span::before {
     color: #ff4545;
 }
 
+.tableContainer{
+    margin-top: 10px;
+    width: 100%;
+    max-height: 100px;
+    border: 1px solid red;
+    overflow-y: auto;
+}
+
 table {
     display: none;
 }
@@ -238,7 +235,6 @@ table {
 .submitted {
     display: table;
     width: 100%;
-    margin-top: 1.5rem;
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
@@ -265,13 +261,9 @@ td {
     color:#f1f5f9;
 }
 
-td:last-child {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    gap: 5px;
-    flex-wrap: wrap;
+thead {
+    position: sticky;  
+    top: 0;
 }
 
 
@@ -286,6 +278,14 @@ td:last-child {
     }
     .container, .card, .submitted {
         max-width: 475px;
+    }
+
+    th {
+        font-size: 1em;
+    }
+
+    td {
+        font-size: 0.8em;
     }
 
 }
@@ -316,7 +316,11 @@ td:last-child {
     }
 
     .submitted {
-        max-width: 640px;
+        max-width: 100%;
+    }
+
+    .tableContainer {
+        max-width: 80%;
     }
 
 }
@@ -327,6 +331,10 @@ td:last-child {
         max-width: 1280px;
     }
 
+    .tableContainer {
+        max-width: 70%;
+    }
+
 }
 
 /* 2xl */
@@ -334,4 +342,5 @@ td:last-child {
     .container {
         max-width: 1536px;
     }
+    
 }

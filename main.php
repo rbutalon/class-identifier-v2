@@ -7,13 +7,6 @@ function addUserData($id, $firstName, $lastName, $gender, $age, $address, &$sect
         $_SESSION["users"] = []; // create array if not exists
     }
 
-    // check duplicate ID
-    foreach ($_SESSION["users"] as $user) {
-        if ($user["id"] == $id) {
-            return ["status" => "error", "message" => "User ID already exists! Edit or delete it."];
-        }
-    }
-
     // section validation using gender and surname
     $surname = strtoupper($lastName);
     $section = "Unknown"; // default
@@ -47,22 +40,6 @@ function addUserData($id, $firstName, $lastName, $gender, $age, $address, &$sect
     
     $_SESSION["users"][] = $newUser;
     return ["status" => "success", "message" => "User added successfully!", "section" => $section, "summary" => $newUser];
-}
-
-function deleteUserData($id)
-{
-    if (!isset($_SESSION["users"]) || count($_SESSION["users"]) == 0) {
-        return ["status" => "error", "message" => "No users found."];
-    }
-
-    foreach ($_SESSION["users"] as $index => $user) {
-        if ($user["id"] == $id) {
-            array_splice($_SESSION["users"], $index, 1); // Remove user
-            return ["status" => "success", "message" => "User deleted successfully!"];
-        }
-    }
-
-    return ["status" => "error", "message" => "User not found."];
 }
 
 // Handle form submission
