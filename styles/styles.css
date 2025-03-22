@@ -224,7 +224,6 @@ input[type="radio"]:checked + span::before {
     margin-top: 10px;
     width: 100%;
     max-height: 100px;
-    border: 1px solid red;
     overflow-y: auto;
 }
 
@@ -341,6 +340,10 @@ thead {
 @media (min-width: 1536px) {
     .container {
         max-width: 1536px;
+    }
+
+    .tableContainer {
+        max-height: 150px;
     }
     
 }
