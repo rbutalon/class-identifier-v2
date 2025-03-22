@@ -167,7 +167,14 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 
-   
+    function sortId() {
+      let tableBody = document.getElementById("userInfos");
+      let rows = Array.from(tableBody.rows); // convert to array
+  
+      rows.sort((a, b) => a.cells[0].innerText - b.cells[0].innerText); // if a - b is negative, a comes first; if positive, b comes first
+  
+      rows.forEach(row => tableBody.appendChild(row)); // apply the sorted rows
+  }
     
 // Form submission validation
 card.addEventListener("submit", (event) => {
@@ -272,6 +279,7 @@ card.addEventListener("submit", (event) => {
             `;
 
             tableBody.appendChild(newRow);
+            sortId();
           }
         } else {
           Swal.fire({
