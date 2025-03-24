@@ -2,7 +2,7 @@
 class userManager {
     public function addUserData($id, $firstName, $lastName, $gender, $age, $address, &$section) {
         if (!isset($_SESSION["users"])) {
-            $_SESSION["users"] = []; // create array if not exists
+            $_SESSION["users"] = []; // create session array if it doesn't exist, if it does, keep it unchanged
         }
 
         // section validation using gender and surname
@@ -26,7 +26,7 @@ class userManager {
 
         $genderText = ($gender == "3") ? "Male" : "Female";
 
-        // Add user to session storage
+        // add user to session array
         $newUser = [
             "id" => $id,
             "Name" => "$firstName $lastName",
