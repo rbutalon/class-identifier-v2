@@ -175,6 +175,31 @@ document.addEventListener('DOMContentLoaded', function() {
   
       rows.forEach(row => tableBody.appendChild(row)); // apply the sorted rows
   }
+
+  // function to identify or validate the section (same as the main.php)
+  function identifySection(lastName, gender) {
+    if (!lastName || !gender) return "Unknown"; // validate if no input
+
+    const surname = lastName.toUpperCase();
+    const firstLetter = surname[0];
+    const surnameGroup = (firstLetter >= 'A' && firstLetter <= 'M') ? 1 : 2;
+
+    const genderNormalized = gender.trim().toLowerCase() === "male" ? "3" : gender.trim().toLowerCase() === "female" ? "4" : "Unknown";
+
+    let section = "Unknown"; // default
+
+    if (surnameGroup === 1 && genderNormalized === "3") {
+        section = "Class A";
+    } else if (surnameGroup === 2 && genderNormalized === "4") {
+        section = "Class B";
+    } else if (surnameGroup === 2 && genderNormalized === "3") {
+        section = "Class C";
+    } else if (surnameGroup === 1 && genderNormalized === "4") {
+        section = "Class D";
+    }
+
+    return section;
+}
     
 // Form submission validation
 card.addEventListener("submit", (event) => {
@@ -216,32 +241,86 @@ card.addEventListener("submit", (event) => {
               cancelButtonText: "Cancel",
             }).then((result) => {
               if (result.isConfirmed) {
-                // Edit option
+                // edit option in swal
                 Swal.fire({
                   title: "Edit Information",
                   html: `
-                    <input id="swal-name" class="swal2-input" placeholder="Name" value="${existingRow.cells[1].innerText}">
-                    <input id="swal-gender" class="swal2-input" placeholder="Gender" value="${existingRow.cells[2].innerText}">
+                  <div style="display: flex; flex-direction: column; text-align: center;">
+                    <label for="swal-fName">First Name</label>
+                    <input id="swal-fName" class="swal2-input" placeholder="First Name" value="${existingRow.cells[1].innerText.split(" ")[0]}"> <!--split the first half (first name)-->
+
+                    <label for="swal-lName">Last Name</label>
+                    <input id="swal-lName" class="swal2-input" placeholder="Last Name" value="${existingRow.cells[1].innerText.split(" ")[1]}"> <!--split the second half (last name)-->
+                    
+                    <label for="swal-gender">Gender</label>
+                    <input id="swal-gender" class="swal2-input" placeholder="Gender (Male/Female)" value="${existingRow.cells[2].innerText}">
+
+                    <label for="swal-age">Age</label>
                     <input id="swal-age" class="swal2-input" placeholder="Age" value="${existingRow.cells[3].innerText}">
+
+                    <label for="swal-address">Address</label>
                     <input id="swal-address" class="swal2-input" placeholder="Address" value="${existingRow.cells[4].innerText}">
+                  </div>
                   `,
                   showCancelButton: true,
                   confirmButtonText: "Save",
+                  allowOutsideClick: false, // prevent closing the modal
                   preConfirm: () => {
+                    const fNameInput = document.getElementById("swal-fName").value.trim();
+                    const lNameInput = document.getElementById("swal-lName").value.trim();
+                    const genderInput = document.getElementById("swal-gender").value.trim().toLowerCase();
+                    const ageInput = document.getElementById("swal-age").value.trim();
+                    const addressInput = document.getElementById("swal-address").value.trim();
+
+                    // check if first and last name contains numbers
+                    const hasNumber = /\d/.test(fNameInput) || /\d/.test(lNameInput);
+                    if (hasNumber) {
+                      Swal.showValidationMessage("First and last name must not contain numbers!");
+                      return false;
+                    }
+
+                    // check if all fields are filled
+                    if (!fNameInput || !lNameInput || !genderInput || !ageInput || !addressInput) {
+                      Swal.showValidationMessage("All fields are required!");
+                      return false;
+                    }
+                    
+                    // gender validation, should only be male or female
+                    if (genderInput !== "male" && genderInput !== "female") {
+                      Swal.showValidationMessage("Please enter a valid gender (Male/Female)!");
+                      return false;
+                    }
+
+                    // age validation, should only be a number
+                    const hasString = /\D/.test(ageInput);
+                    if (hasString) {
+                      Swal.showValidationMessage("Age must be a number!");
+                      return false;
+                    }
+
                     return {
-                      name: document.getElementById("swal-name").value,
-                      gender: document.getElementById("swal-gender").value,
-                      age: document.getElementById("swal-age").value,
-                      address: document.getElementById("swal-address").value,
+                      fName: document.getElementById("swal-fName").value.trim(),
+                      lName: document.getElementById("swal-lName").value.trim(),
+                      gender: genderInput.charAt(0).toUpperCase() + genderInput.slice(1), // Capitalize first letter only
+                      age: document.getElementById("swal-age").value.trim(),
+                      address: document.getElementById("swal-address").value.trim(),
                     };
                   },
                 }).then((editResult) => {
                   if (editResult.isConfirmed) {
-                    // Update the existing row
-                    existingRow.cells[1].innerText = editResult.value.name;
-                    existingRow.cells[2].innerText = editResult.value.gender;
+                    const newLastName = editResult.value.lName.trim();
+                    const newGender = editResult.value.gender.trim();
+                
+                    // call the function to identify the section
+                    const newSection = identifySection(newLastName, newGender);
+                
+                    // update existing rows
+                    existingRow.cells[1].innerText = editResult.value.fName + " " + newLastName;
+                    existingRow.cells[2].innerText = newGender;
                     existingRow.cells[3].innerText = editResult.value.age;
                     existingRow.cells[4].innerText = editResult.value.address;
+                    existingRow.cells[5].innerText = newSection; // Update section column
+                
                     Swal.fire("Updated!", "The record has been updated.", "success");
                   }
                 });
@@ -258,7 +337,7 @@ card.addEventListener("submit", (event) => {
               }
             });
           } else {
-            // If ID doesn't exist, add new row
+            // if ID doesn't exist, add new row
             Swal.fire({
               title: "Section Identified!",
               text: data.message,
@@ -294,7 +373,6 @@ card.addEventListener("submit", (event) => {
   }
 });
 
-  
-  });
+});
   
   
